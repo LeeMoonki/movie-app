@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "typeRoots": ["./node_modules/@types", "./src/@types"],
+    "useDefineForClassFields": true
+  },
+  "exclude": ["**/__tests__"]
+}

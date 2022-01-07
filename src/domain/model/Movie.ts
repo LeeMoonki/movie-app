@@ -11,11 +11,67 @@ class Movie {
   private discountConditions: DiscountCondition[];
 
   private movieType: MovieType;
-  private dicountAmount: Money;
+  private discountAmount: Money;
   private discountPercent: number;
 
+  constructor(
+    title: string,
+    runningTime: Duration,
+    fee: Money,
+    discountConditions: DiscountCondition[],
+
+    movieType: MovieType,
+    discountAmount: Money,
+    discountPercent: number
+  ) {
+    this.title = title;
+    this.runningTime = runningTime;
+    this.fee = fee;
+    this.discountConditions = discountConditions;
+
+    this.movieType = movieType;
+    this.discountAmount = discountAmount;
+    this.discountPercent = discountPercent;
+  }
+
   public calculateMovieFee(screening: Screening): Money {
-    return new Money(1);
+    if (this.isDiscountable(screening)) {
+      return this.fee.minus(this.calculateDiscountAmount());
+    }
+
+    return this.fee;
+  }
+
+  private isDiscountable(screening: Screening): boolean {
+    return this.discountConditions.some((condition) => condition.isSatisfiedBy(screening));
+  }
+
+  private calculateDiscountAmount(): Money {
+    if (this.movieType === MovieType.AMOUNT_DISCOUNT) {
+      return this.calculateAmountDiscountAmount();
+    }
+
+    if (this.movieType === MovieType.PERCENTAGE_DISCOUNT) {
+      return this.calculatePercentDiscountAmount();
+    }
+
+    if (this.movieType === MovieType.NONE_DISCOUNT) {
+      return this.calculateNoneDiscountAmount();
+    }
+
+    throw new Error('Unknown discount type');
+  }
+
+  private calculateAmountDiscountAmount(): Money {
+    return this.discountAmount;
+  }
+
+  private calculatePercentDiscountAmount(): Money {
+    return this.fee.times(this.discountPercent);
+  }
+
+  private calculateNoneDiscountAmount(): Money {
+    return Money.ZERO;
   }
 }
 

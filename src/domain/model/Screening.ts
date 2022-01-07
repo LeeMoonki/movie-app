@@ -8,12 +8,18 @@ class Screening {
   private sequence: number;
   private whenScreened: Date;
 
+  constructor(movie: Movie, sequence: number, whenScreened: Date) {
+    this.movie = movie;
+    this.sequence = sequence;
+    this.whenScreened = whenScreened;
+  }
+
   public reserve(customer: Customer, audienceCount: number): Reservation {
     return new Reservation();
   }
 
   private calculateFee(audienceCount: number): Money {
-    return new Movie().calculateMovieFee(this);
+    return this.movie.calculateMovieFee(this).times(audienceCount);
   }
 }
 

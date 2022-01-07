@@ -23,6 +23,10 @@ class Money {
     return this._amount === amount._amount;
   }
 
+  public times(multiplier: number) {
+    return new Money(this._amount * multiplier);
+  }
+
   private _parseAmountToCurrencyFormat(
     number: number | string | null | undefined,
     maxLength?: number

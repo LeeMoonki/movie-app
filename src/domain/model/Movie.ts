@@ -14,16 +14,25 @@ class Movie {
   private discountAmount: Money;
   private discountPercent: number;
 
-  constructor(
-    title: string,
-    runningTime: Duration,
-    fee: Money,
-    discountConditions: DiscountCondition[],
+  constructor({
+    title,
+    runningTime,
+    fee,
+    discountConditions,
 
-    movieType: MovieType,
-    discountAmount: Money,
-    discountPercent: number
-  ) {
+    movieType,
+    discountAmount,
+    discountPercent,
+  }: {
+    title: string;
+    runningTime: Duration;
+    fee: Money;
+    discountConditions: DiscountCondition[];
+
+    movieType: MovieType;
+    discountAmount: Money;
+    discountPercent: number;
+  }) {
     this.title = title;
     this.runningTime = runningTime;
     this.fee = fee;
@@ -34,7 +43,7 @@ class Movie {
     this.discountPercent = discountPercent;
   }
 
-  public calculateMovieFee(screening: Screening): Money {
+  public calculateMovieFee(screening: Screening) {
     if (this.isDiscountable(screening)) {
       return this.fee.minus(this.calculateDiscountAmount());
     }
@@ -42,11 +51,11 @@ class Movie {
     return this.fee;
   }
 
-  private isDiscountable(screening: Screening): boolean {
+  private isDiscountable(screening: Screening) {
     return this.discountConditions.some((condition) => condition.isSatisfiedBy(screening));
   }
 
-  private calculateDiscountAmount(): Money {
+  private calculateDiscountAmount() {
     if (this.movieType === MovieType.AMOUNT_DISCOUNT) {
       return this.calculateAmountDiscountAmount();
     }
@@ -62,15 +71,15 @@ class Movie {
     throw new Error('Unknown discount type');
   }
 
-  private calculateAmountDiscountAmount(): Money {
+  private calculateAmountDiscountAmount() {
     return this.discountAmount;
   }
 
-  private calculatePercentDiscountAmount(): Money {
+  private calculatePercentDiscountAmount() {
     return this.fee.times(this.discountPercent);
   }
 
-  private calculateNoneDiscountAmount(): Money {
+  private calculateNoneDiscountAmount() {
     return Money.ZERO;
   }
 }
